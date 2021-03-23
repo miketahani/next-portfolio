@@ -4,7 +4,7 @@
 
 Just a weird and cool way to display some of my old [datahacker](http://datahacker.tumblr.com) work.
 Uses an [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for
-an infinite-scroll-esque feature that updates a voronoi diagram that is used to generate clip paths for images.
+an infinite-scroll-esque feature that updates a responsive voronoi diagram that is used to generate clip paths for images.
 
 ### TODO
 
