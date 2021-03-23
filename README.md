@@ -6,6 +6,9 @@ Just a weird and cool way to display some of my old [datahacker](http://datahack
 Uses an [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) for
 an infinite-scroll-esque feature that updates a responsive voronoi diagram that is used to generate clip paths for images.
 
+
+This is a WIP but will eventually be deployed somewhere on [my main site](https://miketahani.com).
+
 ### TODO
 
 - Consider a [better infinite scroll method](https://developers.google.com/web/updates/2016/07/infinite-scroller)
