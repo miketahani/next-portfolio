@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 export function useSimpleResize (targetNode = window) {
   const [dimensions, setDimensions] = useState([targetNode.innerWidth, targetNode.innerHeight])
