@@ -37,3 +37,14 @@ export function asyncFetchImage (imagePath) {
     image.src = imagePath
   })
 }
+
+export function debounce (fn, duration) {
+  let timeout
+  return function (...args) {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      timeout = null
+      fn.apply(this, args)
+    }, duration)
+  }
+}
