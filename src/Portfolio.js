@@ -4,7 +4,7 @@ import { Delaunay } from 'd3-delaunay'
 import { line } from 'd3-shape'
 
 import { useObserver } from './hooks/useObserver'
-import { useSimpleResize } from './hooks/useSimpleResize'
+import { useDebouncedResize } from './hooks/useDebouncedResize'
 import { shuffle, asyncFetchImage } from './util'
 
 import CellImage from './CellImage'
@@ -29,7 +29,7 @@ export default function Portfolio () {
   const [voronoi, setVoronoi] = useState([])
   const observerTargetNode = useRef()
 
-  const [width, height] = useSimpleResize()
+  const [width, height] = useDebouncedResize(250)
 
   // FIXME Hack to update the target node value of `useObserver` because it's a ref
   const [isObserverTargetMounted, setIsMounted] = useState(false)
