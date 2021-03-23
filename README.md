@@ -8,7 +8,6 @@ an infinite-scroll-esque feature that updates a responsive voronoi diagram that 
 
 ### TODO
 
-- Figure out how to cache images loaded via `new Image` so we're not loading them twice (cache misses here), and make it more performant than converting to a data URL
 - Consider a [better infinite scroll method](https://developers.google.com/web/updates/2016/07/infinite-scroller)
 - Create thumbnail images for vis (using `mogrify`) and only show large sizes on click
 - Major cleanup & `useEffect` consolidation around position calculations and `visPage` vs `page + 1`
