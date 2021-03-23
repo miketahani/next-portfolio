@@ -57,7 +57,8 @@ export function Visualization ({ page }) {
 
   const [width, height] = useDebouncedResize(250)
 
-  const addPoints = useCallback(() => {
+  // Load new images when page updates
+  useEffect(() => {
     (async () => {
       const nextImages = imageManifest
         .slice(page * IMAGES_PER_PAGE, (page + 1) * IMAGES_PER_PAGE)
@@ -73,9 +74,6 @@ export function Visualization ({ page }) {
       setPoints(prevPoints => [...prevPoints, ...nextPoints])
     })()
   }, [page])
-
-  // `addPoints` changes when `page` changes
-  useEffect(() => { addPoints() }, [addPoints])
 
   useEffect(() => {
     const delaunayPoints = points.map(([image, _page, ...point]) => [
