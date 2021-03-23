@@ -6,7 +6,6 @@ Just a weird and cool way to display some of my old [datahacker](http://datahack
 
 ### TODO
 
-- Throttle resize handler
 - Create thumbnail images for vis (using `mogrify`) and only show large sizes on click
 - Major cleanup & `useEffect` consolidation around position calculations and `visPage` vs `page + 1`
 - Modal for displaying info
