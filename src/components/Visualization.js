@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 import { Delaunay } from 'd3-delaunay'
 import { line } from 'd3-shape'
@@ -32,7 +32,6 @@ async function* loadImages (images) {
 
 export default function Visualization ({ page }) {
   const [points, setPoints] = useState([])
-  const [voronoi, setVoronoi] = useState([])
 
   const [width, height] = useDebouncedResize(250)
 
@@ -54,14 +53,16 @@ export default function Visualization ({ page }) {
     })()
   }, [page])
 
-  useEffect(() => {
+  const voronoi = useMemo(() => {
+    if (!points.length) return []
+
     const delaunayPoints = points.map(({ page: _page, x, y }) => [
       x * width,
       y * height + _page * height
     ])
     const delaunay = Delaunay.from(delaunayPoints)
     const polygons = delaunay.voronoi([0, 0, width, (page + 1) * height]).cellPolygons()
-    setVoronoi([...polygons])
+    return [...polygons]
   }, [points, page, width, height])
 
   console.log('PAGE', page, voronoi.length / IMAGES_PER_PAGE)
