@@ -3,11 +3,12 @@ import { useState, useEffect, useMemo } from 'react'
 import { Delaunay } from 'd3-delaunay'
 import { line } from 'd3-shape'
 
-import { useDebouncedResize } from '../hooks/useDebouncedResize'
-
 import CellImage from './CellImage'
 
+import { useDebouncedResize } from '../hooks/useDebouncedResize'
 import imageManifest from '../util/loadManifest'
+import { lerp } from '../util'
+
 
 const IMAGES_DIRECTORY = `${process.env.PUBLIC_URL}/datahacker-images`
 const IMAGES_PER_PAGE = 50
@@ -26,13 +27,12 @@ export default function Visualization ({ page }) {
         .slice(page * IMAGES_PER_PAGE, (page + 1) * IMAGES_PER_PAGE)
 
       // Add random normalized xy coords which will be combined with `page` when we calc voronoi
-      // FIXME poisson distribution
       const nextPoints = nextImages.map(meta => ({
         meta,
         page,
         filePath: `${IMAGES_DIRECTORY}/${meta.filename}`,
-        x: Math.random(),
-        y: Math.random()
+        x: lerp(0.05, 0.95, Math.random()),
+        y: lerp(0.05, 0.95, Math.random())
       }))
       setPoints(prevPoints => [...prevPoints, ...nextPoints])
     })()
