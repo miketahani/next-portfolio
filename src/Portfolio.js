@@ -66,7 +66,7 @@ export function Visualization ({ page }) {
       // Load images explicitly (instead of via SVG <image href=...>) so we can
       // get their dimensions for free (for fitting images to clip path polygons)
       for await (let image of loadImages(nextImages)) {
-        // Add two random points which will be calculated when we calc voronoi
+        // Add random normalized xy coords which will be calculated when we calc voronoi
         // FIXME poisson distribution?
         nextPoints.push([image, page, Math.random(), Math.random()])
       }
