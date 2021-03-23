@@ -66,19 +66,19 @@ export function Visualization ({ page }) {
       const nextPoints = []
       // Load images explicitly (instead of via SVG <image href=...>) so we can
       // get their dimensions for free (for fitting images to clip path polygons)
-      for await (let image of loadImages(nextImages)) {
+      for await (let meta of loadImages(nextImages)) {
         // Add random normalized xy coords which will be calculated when we calc voronoi
         // FIXME poisson distribution?
-        nextPoints.push([image, page, Math.random(), Math.random()])
+        nextPoints.push({ meta, page, x: Math.random(), y: Math.random() })
       }
       setPoints(prevPoints => [...prevPoints, ...nextPoints])
     })()
   }, [page])
 
   useEffect(() => {
-    const delaunayPoints = points.map(([image, _page, ...point]) => [
-      point[0] * width,
-      point[1] * height + _page * height
+    const delaunayPoints = points.map(({ page: _page, x, y }) => [
+      x * width,
+      y * height + _page * height
     ])
     const delaunay = Delaunay.from(delaunayPoints)
     const polygons = delaunay.voronoi([0, 0, width, (page + 1) * height]).cellPolygons()
@@ -105,10 +105,10 @@ export function Visualization ({ page }) {
       style={{paddingBottom: '100px'}}
     >
       <defs>
-        {points.map(([image], i) =>
-          <clipPath id={`poly-${i}`} key={i}>
+        {voronoi && voronoi.map(cell =>
+          <clipPath id={`poly-${cell.index}`} key={cell.index}>
             <path
-              d={voronoi[i] && path(voronoi[i])}
+              d={path(cell)}
               fill="none"
             />
           </clipPath>
@@ -116,12 +116,12 @@ export function Visualization ({ page }) {
       </defs>
 
       <g id="images">
-        {points.map(([image, _page, ...position], i) =>
+        {points.map(({ meta, page: _page, x, y }, i) =>
           <CellImage
-            image={image}
+            image={meta}
             polygon={voronoi[i]}
             // FIXME oh god the jank
-            position={[position[0] * width, position[1] * height + _page * height]}
+            position={[x * width, y * height + _page * height]}
             index={i}
             key={i}
           />
