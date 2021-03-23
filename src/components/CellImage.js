@@ -6,8 +6,6 @@ export default function CellImage ({ image, localPath, polygon, position, index 
   const bbox = getBBox(polygon)
   const { width, height } = fitImage(image, bbox)
 
-  console.log(image.filePath)
-
   return (
     <image
       href={localPath}
