@@ -21,10 +21,19 @@ export function getBBox (vertices) {
   }
 }
 
-export const fitImage = (image, bbox) => {
+export function fitImage (image, bbox) {
   const scale = Math.max(bbox.width / image.width, bbox.height / image.height) * 2
   return {
     width: image.width * scale,
     height: image.height * scale
   }
+}
+
+export function asyncFetchImage (imagePath) {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+    image.addEventListener('load', () => resolve(image))
+    image.addEventListener('error', reject)
+    image.src = imagePath
+  })
 }
