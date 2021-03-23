@@ -1,5 +1,3 @@
-import { extent } from 'd3-array'
-
 // Return a shuffled copy of a given array
 export function shuffle (arr) {
   if (!arr?.length) return arr;
@@ -8,6 +6,15 @@ export function shuffle (arr) {
     next.push(_arr.splice(Math.floor(Math.random() * _arr.length), 1)[0])
   }
   return next
+}
+
+export function extent (arr, accessor) {
+  return arr.reduce(([min, max], _item) => {
+    const item = accessor(_item)
+    if (item < min || min === undefined) min = item;
+    if (item > max || max === undefined) max = item;
+    return [min, max]
+  }, [undefined, undefined])
 }
 
 export function getBBox (vertices) {
