@@ -5,7 +5,9 @@ import { line } from 'd3-shape'
 
 import { useObserver } from './hooks/useObserver'
 import { useSimpleResize } from './hooks/useSimpleResize'
-import { getBBox, fitImage, shuffle } from './util'
+import { shuffle, asyncFetchImage } from './util'
+
+import CellImage from './CellImage'
 
 import manifest from './manifest.json'
 
@@ -17,20 +19,11 @@ const imageManifest = shuffle(
 )
 
 const IMAGES_DIRECTORY = `${process.env.PUBLIC_URL}/datahacker-images`
-const IMAGES_PER_PAGE = 40
+const IMAGES_PER_PAGE = 50
 
 const path = line()
 
-function asyncFetchImage (imagePath) {
-  return new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener('load', () => resolve(image))
-    image.addEventListener('error', reject)
-    image.src = imagePath
-  })
-}
-
-export default function TestLoadingVoronoi () {
+export default function Portfolio () {
   const [page, setPage] = useState(0)
   const [points, setPoints] = useState([])
   const [voronoi, setVoronoi] = useState([])
@@ -53,14 +46,13 @@ export default function TestLoadingVoronoi () {
       const nextPoints = await Promise.all(nextImages.map(async ([id, filename]) => {
         const filePath = `${IMAGES_DIRECTORY}/${filename}`
         const image = await asyncFetchImage(filePath)
-        const meta = {
-          id,
-          filePath,
-          width: image.width,
-          height: image.height
-        }
         return [
-          meta,
+          {
+            id,
+            filePath,
+            width: image.width,
+            height: image.height
+          },
           page,
           Math.random(),
           Math.random()
@@ -131,7 +123,8 @@ export default function TestLoadingVoronoi () {
           <g key={cell.index}>
             <path
               d={path(cell)}
-              stroke="#000"
+              strokeWidth="2"
+              stroke="#fff"
               fill="none"
             />
           </g>
@@ -140,24 +133,5 @@ export default function TestLoadingVoronoi () {
 
       <div id="ObserverTarget" ref={observerTargetNode} />
     </>
-  )
-}
-
-function CellImage ({ image, polygon, position, index }) {
-  if (!polygon) return null;
-
-  const bbox = getBBox(polygon)
-  const { width, height } = fitImage(image, bbox)
-
-  return (
-    <image
-      href={image.filePath}
-      width={~~width}
-      height={~~height}
-      clipPath={`url(#poly-${index})`}
-      x={position[0] - width / 2}
-      y={position[1] - height / 2}
-      key={image.id}
-    />
   )
 }
