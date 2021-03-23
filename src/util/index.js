@@ -55,3 +55,8 @@ export function debounce (fn, duration) {
     }, duration)
   }
 }
+
+// @param {float} value  Number between 0 and 1
+export function lerp (min, max, value) {
+  return (max - min) * value + min
+}
