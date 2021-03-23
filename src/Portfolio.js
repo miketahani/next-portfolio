@@ -105,7 +105,7 @@ export function Visualization ({ page }) {
       style={{paddingBottom: '100px'}}
     >
       <defs>
-        {voronoi && voronoi.map(cell =>
+        {voronoi.map(cell =>
           <clipPath id={`poly-${cell.index}`} key={cell.index}>
             <path
               d={path(cell)}
@@ -129,7 +129,7 @@ export function Visualization ({ page }) {
       </g>
 
       <g id="outlines">
-        {voronoi && voronoi.map(cell =>
+        {voronoi.map(cell =>
           <path
             d={path(cell)}
             strokeWidth="2"
