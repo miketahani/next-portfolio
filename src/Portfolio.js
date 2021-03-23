@@ -23,41 +23,53 @@ const IMAGES_PER_PAGE = 50
 
 const path = line()
 
+async function* loadImages (images) {
+  for (let [id, filename] of images) {
+    const filePath = `${IMAGES_DIRECTORY}/${filename}`
+    const image = await asyncFetchImage(filePath)
+    yield { id, filePath, width: image.width, height: image.height }
+  }
+}
+
 export default function Portfolio () {
   const [page, setPage] = useState(0)
-  const [points, setPoints] = useState([])
-  const [voronoi, setVoronoi] = useState([])
   const observerTargetNode = useRef()
 
+    // FIXME Hack to update the target node value of `useObserver` because it's a ref
+    const [isObserverTargetMounted, setIsMounted] = useState(false)
+    useEffect(() => { observerTargetNode.current && !isObserverTargetMounted && setIsMounted(true) })
+
+    const nextPage = useCallback(() => setPage(prevPage => prevPage + 1), [])
+    useObserver(observerTargetNode.current, nextPage)
+
+  return (
+    <>
+      <Visualization page={page} />
+
+      <div id="ObserverTarget" ref={observerTargetNode} />
+    </>
+  )
+}
+
+export function Visualization ({ page }) {
+  const [points, setPoints] = useState([])
+  const [voronoi, setVoronoi] = useState([])
+
   const [width, height] = useDebouncedResize(250)
-
-  // FIXME Hack to update the target node value of `useObserver` because it's a ref
-  const [isObserverTargetMounted, setIsMounted] = useState(false)
-  useEffect(() => { if (observerTargetNode.current && !isObserverTargetMounted) setIsMounted(true) })
-
-  const nextPage = useCallback(() => setPage(prevPage => prevPage + 1), [])
-  useObserver(observerTargetNode.current, nextPage)
 
   const addPoints = useCallback(() => {
     (async () => {
       const nextImages = imageManifest
         .slice(page * IMAGES_PER_PAGE, (page + 1) * IMAGES_PER_PAGE)
 
-      const nextPoints = await Promise.all(nextImages.map(async ([id, filename]) => {
-        const filePath = `${IMAGES_DIRECTORY}/${filename}`
-        const image = await asyncFetchImage(filePath)
-        return [
-          {
-            id,
-            filePath,
-            width: image.width,
-            height: image.height
-          },
-          page,
-          Math.random(),
-          Math.random()
-        ]
-      }))
+      const nextPoints = []
+      // Load images explicitly (instead of via SVG <image href=...>) so we can
+      // get their dimensions for free (for fitting images to clip path polygons)
+      for await (let image of loadImages(nextImages)) {
+        // Add two random points which will be calculated when we calc voronoi
+        // FIXME poisson distribution?
+        nextPoints.push([image, page, Math.random(), Math.random()])
+      }
       setPoints(prevPoints => [...prevPoints, ...nextPoints])
     })()
   }, [page])
@@ -88,51 +100,47 @@ export default function Portfolio () {
   const visPage = voronoi.length / IMAGES_PER_PAGE
 
   return (
-    <>
-      <svg
-        width="100vw"
-        height={`${visPage * 100}vh`}
-        viewBox={`0 0 ${width} ${visPage * height}`}
-        style={{paddingBottom: '100px'}}
-      >
-        <defs>
-          {points.map(([image], i) =>
-            <clipPath id={`poly-${i}`} key={i}>
-              <path
-                d={voronoi[i] && path(voronoi[i])}
-                fill="none"
-              />
-            </clipPath>
-          )}
-        </defs>
-
-        <g id="images">
-          {points.map(([image, _page, ...position], i) =>
-            <CellImage
-              image={image}
-              polygon={voronoi[i]}
-              // FIXME oh god the jank
-              position={[position[0] * width, position[1] * height + _page * height]}
-              index={i}
-              key={i}
-            />
-          )}
-        </g>
-
-        <g id="outlines">
-          {voronoi && voronoi.map(cell =>
+    <svg
+      width="100vw"
+      height={`${visPage * 100}vh`}
+      viewBox={`0 0 ${width} ${visPage * height}`}
+      style={{paddingBottom: '100px'}}
+    >
+      <defs>
+        {points.map(([image], i) =>
+          <clipPath id={`poly-${i}`} key={i}>
             <path
-              d={path(cell)}
-              strokeWidth="2"
-              stroke="#fff"
+              d={voronoi[i] && path(voronoi[i])}
               fill="none"
-              key={cell.index}
             />
-          )}
-        </g>
-      </svg>
+          </clipPath>
+        )}
+      </defs>
 
-      <div id="ObserverTarget" ref={observerTargetNode} />
-    </>
+      <g id="images">
+        {points.map(([image, _page, ...position], i) =>
+          <CellImage
+            image={image}
+            polygon={voronoi[i]}
+            // FIXME oh god the jank
+            position={[position[0] * width, position[1] * height + _page * height]}
+            index={i}
+            key={i}
+          />
+        )}
+      </g>
+
+      <g id="outlines">
+        {voronoi && voronoi.map(cell =>
+          <path
+            d={path(cell)}
+            strokeWidth="2"
+            stroke="#fff"
+            fill="none"
+            key={cell.index}
+          />
+        )}
+      </g>
+    </svg>
   )
 }
