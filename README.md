@@ -11,5 +11,5 @@ an infinite-scroll-esque feature that updates a responsive voronoi diagram that 
 - Consider a [better infinite scroll method](https://developers.google.com/web/updates/2016/07/infinite-scroller)
 - Create thumbnail images for vis (using `mogrify`) and only show large sizes on click
 - Major cleanup & `useEffect` consolidation around position calculations and `visPage` vs `page + 1`
-- Modal for displaying info
+- Modal for displaying info, better UI for footer, etc
 - Deploy this somewhere
