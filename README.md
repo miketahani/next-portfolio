@@ -15,4 +15,4 @@ This is a WIP but will eventually be deployed somewhere on [my main site](https:
 - Create thumbnail images for vis (using `mogrify`) and only show large sizes on click
 - Major cleanup & `useEffect` consolidation around position calculations and `visPage` vs `page + 1`
 - Modal for displaying info, better UI for footer, etc
-- Deploy this somewhere
+- Make ready for prod (error checking, tests) and deploy this somewhere
