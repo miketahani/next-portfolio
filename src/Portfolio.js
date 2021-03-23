@@ -85,14 +85,14 @@ export default function Portfolio () {
    * height and viewBox will cause "stretching" in the diagram before the new
    * cells are added to the visualization.
    */
-  const currPage = voronoi.length / IMAGES_PER_PAGE
+  const visPage = voronoi.length / IMAGES_PER_PAGE
 
   return (
     <>
       <svg
         width="100vw"
-        height={`${currPage * 100}vh`}
-        viewBox={`0 0 ${width} ${currPage * height}`}
+        height={`${visPage * 100}vh`}
+        viewBox={`0 0 ${width} ${visPage * height}`}
         style={{paddingBottom: '100px'}}
       >
         <defs>
