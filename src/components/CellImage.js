@@ -1,4 +1,4 @@
-import { getBBox, fitImage } from './util'
+import { getBBox, fitImage } from '../util'
 
 export default function CellImage ({ image, polygon, position, index }) {
   if (!polygon) return null;

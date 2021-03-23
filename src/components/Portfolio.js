@@ -3,13 +3,13 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { Delaunay } from 'd3-delaunay'
 import { line } from 'd3-shape'
 
-import { useObserver } from './hooks/useObserver'
-import { useDebouncedResize } from './hooks/useDebouncedResize'
-import { shuffle, asyncFetchImage } from './util'
+import { useObserver } from '../hooks/useObserver'
+import { useDebouncedResize } from '../hooks/useDebouncedResize'
+import { shuffle, asyncFetchImage } from '../util'
 
 import CellImage from './CellImage'
 
-import manifest from './manifest.json'
+import manifest from '../manifest.json'
 
 // Just need to do this once
 const imageManifest = shuffle(
