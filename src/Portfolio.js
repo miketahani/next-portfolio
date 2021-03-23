@@ -119,16 +119,17 @@ export default function Portfolio () {
           )}
         </g>
 
-        {voronoi && voronoi.map(cell =>
-          <g key={cell.index}>
+        <g id="outlines">
+          {voronoi && voronoi.map(cell =>
             <path
               d={path(cell)}
               strokeWidth="2"
               stroke="#fff"
               fill="none"
+              key={cell.index}
             />
-          </g>
-        )}
+          )}
+        </g>
       </svg>
 
       <div id="ObserverTarget" ref={observerTargetNode} />
