@@ -35,12 +35,12 @@ export default function Portfolio () {
   const [page, setPage] = useState(0)
   const observerTargetNode = useRef()
 
-    // FIXME Hack to update the target node value of `useObserver` because it's a ref
-    const [isObserverTargetMounted, setIsMounted] = useState(false)
-    useEffect(() => { observerTargetNode.current && !isObserverTargetMounted && setIsMounted(true) })
+  // FIXME Hack to update the target node value of `useObserver` because it's a ref
+  const [isObserverTargetMounted, setIsMounted] = useState(false)
+  useEffect(() => { observerTargetNode.current && !isObserverTargetMounted && setIsMounted(true) })
 
-    const nextPage = useCallback(() => setPage(prevPage => prevPage + 1), [])
-    useObserver(observerTargetNode.current, nextPage)
+  const nextPage = useCallback(() => setPage(prevPage => prevPage + 1), [])
+  useObserver(observerTargetNode.current, nextPage)
 
   return (
     <>
