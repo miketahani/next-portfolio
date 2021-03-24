@@ -8,9 +8,7 @@ import CellImage from './CellImage'
 import { useDebouncedResize } from '../hooks/useDebouncedResize'
 import { lerp } from '../util'
 
-
-const IMAGES_DIRECTORY = `${process.env.PUBLIC_URL}/datahacker-images`
-const IMAGES_PER_PAGE = 50
+import { IMAGES_DIRECTORY, IMAGES_PER_PAGE } from '../config'
 
 const path = line()
 
@@ -66,7 +64,7 @@ export default function Visualization ({ page, imageManifest, onSelectPortfolioI
       width="100vw"
       height={`${visPage * 100}vh`}
       viewBox={`0 0 ${width} ${visPage * height}`}
-      style={{paddingBottom: '100px'}}
+      style={{marginBottom: '100px'}}
     >
       <defs>
         {voronoi.map(cell =>
