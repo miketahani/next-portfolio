@@ -11,7 +11,7 @@ function createModalElement () {
   return el
 }
 
-export function Modal ({ children }) {
+export default function Modal ({ children }) {
   const el = useRef(createModalElement())
 
   useEffect(() => {
