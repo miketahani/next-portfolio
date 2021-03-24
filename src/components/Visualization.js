@@ -33,7 +33,7 @@ export default function Visualization ({ page, imageManifest, onSelectPortfolioI
       }))
       setPoints(prevPoints => [...prevPoints, ...nextPoints])
     })()
-  }, [page])
+  }, [page, imageManifest])
 
   const voronoi = useMemo(() => {
     if (!points.length) return []
