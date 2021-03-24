@@ -4,7 +4,7 @@
   background-color: rgba(255, 255, 255, 0.9);
 
   display: flex;
-  padding-top: 10%;
+  /* padding-top: 10%; */
   justify-content: center;
 
   position: fixed;
@@ -13,12 +13,4 @@
 
   overflow: hidden;
   pointer-events: all;
-}
-
-.Modal > div {
-  border-radius: 5px;
-  background-color: #fff;
-  padding: 2em;
-  height: 40%;
-  min-height: 320px;
 }
