@@ -9,12 +9,14 @@ export function shuffle (arr) {
 }
 
 export function extent (arr, accessor) {
-  return arr.reduce(([min, max], _item) => {
+  const firstItem = accessor(arr[0])
+
+  return arr.slice(1).reduce(([min, max], _item) => {
     const item = accessor(_item)
-    if (item < min || min === undefined) min = item;
-    if (item > max || max === undefined) max = item;
+    if (item < min) min = item;
+    if (item > max) max = item;
     return [min, max]
-  }, [undefined, undefined])
+  }, [firstItem, firstItem])
 }
 
 export function getBBox (vertices) {
