@@ -3,35 +3,42 @@ import { useState, useCallback, useRef } from 'react'
 
 import { useObserver } from '../hooks/useObserver'
 
+import ImageDetailModal from './ImageDetailModal'
 import Visualization from './Visualization'
 
 import imageManifest, { postsById } from '../util/loadManifest'
 
 export default function Portfolio () {
-  const [page, setPage] = useState(0)
-  const [modal, setModal] = useState(false)
-
+  // Infinite scroll
   const observerTargetNode = useRef()
-
+  const [page, setPage] = useState(0)
   const nextPage = useCallback(() => setPage(prevPage => prevPage + 1), [])
   useObserver(observerTargetNode, nextPage)
 
-  // If there's existing modal content, close the modal; else set the content data
-  //   to the passed-in item index (which should correspond to the fileId)
-  const toggleModal = portfolioItemIndex =>
-    setModal(modal !== false ? false : imageManifest[portfolioItemIndex])
+  // Modal
+  const [modal, setModal] = useState(false)
+  // Memoize `openModal` to prevent unnecessary <Visualization> rerenders
+  const openModal = useCallback(portfolioItemIndex => setModal(imageManifest[portfolioItemIndex]), [])
+  const closeModal = () => setModal(false)
 
   return (
     <>
       <Visualization
         page={page}
         imageManifest={imageManifest}
-        onSelectPortfolioItem={toggleModal}
+        onSelectPortfolioItem={openModal}
       />
 
       <div id="ObserverTarget" ref={observerTargetNode} />
 
-      {!!modal && null}
+      {!!modal &&
+        <ImageDetailModal
+          post={postsById[modal.postId]}
+          image={modal}
+          onSelectPortfolioItem={openModal}
+          onClose={closeModal}
+        />
+      }
     </>
   )
 }
