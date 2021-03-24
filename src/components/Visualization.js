@@ -6,7 +6,6 @@ import { line } from 'd3-shape'
 import CellImage from './CellImage'
 
 import { useDebouncedResize } from '../hooks/useDebouncedResize'
-import imageManifest from '../util/loadManifest'
 import { lerp } from '../util'
 
 
@@ -15,7 +14,7 @@ const IMAGES_PER_PAGE = 50
 
 const path = line()
 
-export default function Visualization ({ page }) {
+export default function Visualization ({ page, imageManifest, onSelectPortfolioItem }) {
   const [points, setPoints] = useState([])
 
   const [width, height] = useDebouncedResize(250)
@@ -100,7 +99,8 @@ export default function Visualization ({ page }) {
             d={path(cell)}
             strokeWidth="2"
             stroke="#fff"
-            fill="none"
+            fillOpacity="0"
+            onClick={() => onSelectPortfolioItem(cell.index)}
             key={cell.index}
           />
         )}
