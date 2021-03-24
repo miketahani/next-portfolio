@@ -1,5 +1,5 @@
 // Simple test to add more points to an existing voronoi diagram
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef } from 'react'
 
 import { useObserver } from '../hooks/useObserver'
 
@@ -9,12 +9,8 @@ export default function Portfolio () {
   const [page, setPage] = useState(0)
   const observerTargetNode = useRef()
 
-  // FIXME Hack to update the target node value of `useObserver` because it's a ref
-  const [isObserverTargetMounted, setIsMounted] = useState(false)
-  useEffect(() => { observerTargetNode.current && !isObserverTargetMounted && setIsMounted(true) })
-
   const nextPage = useCallback(() => setPage(prevPage => prevPage + 1), [])
-  useObserver(observerTargetNode.current, nextPage)
+  useObserver(observerTargetNode, nextPage)
 
   return (
     <>

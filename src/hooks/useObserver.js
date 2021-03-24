@@ -4,14 +4,15 @@ export function useObserver (targetNode, callback) {
   const observer = useRef()
 
   useEffect(() => {
-    if (!targetNode) return;
+    const node = targetNode.current
+    if (!node) return;
 
     observer.current = new IntersectionObserver(entries =>
       entries[0].intersectionRatio > 0 && callback(entries)
     )
-    observer.current.observe(targetNode)
+    observer.current.observe(node)
 
-    return () => observer.current.unobserve(targetNode)
+    return () => observer.current.unobserve(node)
   }, [targetNode, callback])
 
   return observer.current
