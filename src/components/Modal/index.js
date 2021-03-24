@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 
-import './styles.css'
+import './style.css'
 
 const modalRoot = document.getElementById('modal-root')
 
