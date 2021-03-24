@@ -26,15 +26,20 @@ for (let post of manifest.posts) {
       }
     } = post.photos[i]
 
-    imageManifest.push({
+    const imageMeta = {
       width,
       height,
-      caption: caption,
+      caption,
       filename: url.split('/').splice(-1)[0],
       postId: post.id_string,
       photoIndex: i,
       fileId: fileCount++
-    })
+    }
+
+    imageManifest.push(imageMeta)
+    // Add the photo metadata to the post so we can access other post images
+    // easily in a modal
+    postsById[post.id_string].photos[i].meta = imageMeta
   }
 }
 
