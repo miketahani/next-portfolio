@@ -14,15 +14,26 @@ export const postsById = manifest.posts.reduce((posts, post) => ({
 let fileCount = 0
 const imageManifest = []
 for (let post of manifest.posts) {
-  for (let photo of post.photos) {
-    const { width, height, url } = photo.original_size
+  if (!post.photos) continue;
+
+  for (let i = 0; i < post.photos.length; i++) {
+    const {
+      caption,
+      original_size: {
+        width,
+        height,
+        url
+      }
+    } = post.photos[i]
 
     imageManifest.push({
-      fileId: fileCount++,
-      postId: post.id_string,
+      width,
+      height,
+      caption: caption,
       filename: url.split('/').splice(-1)[0],
-      width: width,
-      height: height
+      postId: post.id_string,
+      photoIndex: i,
+      fileId: fileCount++
     })
   }
 }
