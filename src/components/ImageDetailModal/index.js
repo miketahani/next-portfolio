@@ -36,7 +36,7 @@ export default function ImageDetailModal ({ post, image, onSelectImage, onClose 
       <ImageDetailModalContainer>
         <Header>
           <PostInfo>
-            <Title>Archives</Title>
+            <Title>Archive</Title>
             <PostDate>{formatTime(post.timestamp)}</PostDate>
             {post.note_count > 0 && <NoteCount>♥ {commas(post.note_count)}</NoteCount>}
           </PostInfo>
