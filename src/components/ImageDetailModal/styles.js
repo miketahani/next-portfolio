@@ -8,7 +8,8 @@ const bouncein = keyframes`
 export const ImageDetailModalContainer = styled.div`
   position: relative;
   width: 70% !important;
-
+  pointer-events: all;
+  overflow: scroll;
   background-color: #fff;
   padding: 1rem;
 
@@ -17,17 +18,28 @@ export const ImageDetailModalContainer = styled.div`
 
 export const Header = styled.header`
   display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   font-weight: bold;
-  font-size: 1.2rem;
-  text-transform: uppercase;
+  font-family: ApercuBoldPro;
+`
+
+export const PostInfo = styled.div`
+  display: flex;
+  align-items: baseline;
+`
+
+export const HeaderItem = styled.div`
+  margin: 0 0.25rem;
 `
 
 export const Title = styled.div`
+  font-size: 2rem;
+  margin-right: 1rem;
 `
 
 export const Hero = styled.img`
   max-width: 100%;
-  max-height: 50%;
 `
 
 export const HeroCaption = styled.div`
@@ -51,27 +63,37 @@ export const PostImageContainer = styled.div`
 `
 
 export const PostImage = styled.img`
-  width: 100%;
+  max-width: 100%;
+  max-height: 25rem;
+`
+
+export const TagsTitle = styled.span`
+  font-family: ApercuBoldPro;
+  font-size: 0.9rem;
+  text-transform: uppercase;
 `
 
 export const Tag = styled.div`
-  background-color: #ccc;
+  color: #666;
   border-radius: 5px;
   font-size: 0.9rem;
-  padding: 0.5rem;
-  margin: 0.25rem;
+  padding: 0.25rem;
+  margin: 0.1rem;
 `
 
 export const Footer = styled.footer`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   flex-wrap: wrap;
 `
 
 export const PostDate = styled.div`
-
+  text-transform: uppercase;
+  margin-right: 1rem;
+  font-size: 1.3rem;
 `
 
 export const NoteCount = styled.div`
-
+  margin-left: 1rem;
+  font-size: 1.25rem;
 `
