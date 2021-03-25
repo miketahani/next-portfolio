@@ -30,7 +30,7 @@ const formatTime = timestamp => timeFormat('%B %Y')(timestamp * 1000);
 // user input involved here, so this is safe.
 const createCaption = __html => ({ __html });
 
-export default function ImageDetailModal ({ post, image, onClose }) {
+export default function ImageDetailModal ({ post, image, onSelectImage, onClose }) {
   return (
     <Modal>
       <ImageDetailModalContainer>
@@ -56,8 +56,9 @@ export default function ImageDetailModal ({ post, image, onClose }) {
               <PostImageContainer key={photo.meta.photoIndex}>
                 <PostImage
                   src={`${IMAGES_DIRECTORY}/${photo.meta.filename}`}
-                  isCurrentlySelected={photo.meta.fileId === image.fileId}
                   alt={photo.meta.caption || `(image ${photo.meta.photoIndex + 1}/${post.photos.length})`}
+                  isCurrentlySelected={photo.meta.fileId === image.fileId}
+                  onClick={() => onSelectImage(photo.meta)}
                 />
               </PostImageContainer>
             )}

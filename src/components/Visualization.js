@@ -12,7 +12,7 @@ import { IMAGES_DIRECTORY, IMAGES_PER_PAGE } from '../config'
 
 const path = line()
 
-export default function Visualization ({ page, imageManifest, onSelectPortfolioItem }) {
+export default function Visualization ({ page, imageManifest, onSelectImage }) {
   const [points, setPoints] = useState([])
 
   const [width, height] = useDebouncedResize(250)
@@ -98,7 +98,7 @@ export default function Visualization ({ page, imageManifest, onSelectPortfolioI
             strokeWidth="2"
             stroke="#fff"
             fillOpacity="0"
-            onClick={() => onSelectPortfolioItem(cell.index)}
+            onClick={() => onSelectImage(points[cell.index].meta)}
             key={cell.index}
           />
         )}

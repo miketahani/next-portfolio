@@ -6,7 +6,7 @@ import { useObserver } from '../hooks/useObserver'
 import ImageDetailModal from './ImageDetailModal'
 import Visualization from './Visualization'
 
-import imageManifest, { postsById } from '../util/loadManifest'
+import imageManifest, { postsById, imagesByFileId } from '../util/loadManifest'
 import { setHash } from '../util/hash'
 
 export default function Portfolio ({ landingImage = false }) {
@@ -19,8 +19,8 @@ export default function Portfolio ({ landingImage = false }) {
   // Modal
   const [modal, setModal] = useState(landingImage || false)
   // Memoize `openModal` to prevent unnecessary <Visualization> rerenders
-  const openModal = useCallback(portfolioItemIndex => {
-    const image = imageManifest[portfolioItemIndex]
+  const openModal = useCallback(portfolioImage => {
+    const image = imagesByFileId[portfolioImage.fileId]
     setModal(image)
     setHash(image.fileId)
   }, [])
@@ -30,12 +30,9 @@ export default function Portfolio ({ landingImage = false }) {
     setHash()
   }
 
+  // Prevent body from scrolling when modal is open
   useEffect(() => {
-    if (modal) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
+    document.body.style.overflow = modal ? 'hidden' : 'unset'
   }, [modal])
 
   return (
@@ -43,7 +40,7 @@ export default function Portfolio ({ landingImage = false }) {
       <Visualization
         page={page}
         imageManifest={imageManifest}
-        onSelectPortfolioItem={openModal}
+        onSelectImage={openModal}
       />
 
       <div id="ObserverTarget" ref={observerTargetNode} />
@@ -52,7 +49,7 @@ export default function Portfolio ({ landingImage = false }) {
         <ImageDetailModal
           post={postsById[modal.postId]}
           image={modal}
-          onSelectPortfolioItem={openModal}
+          onSelectImage={openModal}
           onClose={closeModal}
         />
       }
