@@ -44,3 +44,8 @@ for (let post of manifest.posts) {
 }
 
 export default shuffle(imageManifest)
+
+export const imagesByFileId = imageManifest.reduce((images, image) => ({
+  ...images,
+  [image.fileId]: image
+}), {})
