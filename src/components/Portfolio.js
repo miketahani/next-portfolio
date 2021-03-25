@@ -8,12 +8,18 @@ import Visualization from './Visualization'
 
 import imageManifest, { postsById, imagesByFileId } from '../util/loadManifest'
 import { setHash } from '../util/hash'
+import { IMAGES_PER_PAGE } from '../config'
+
+const MAX_PAGES = Math.ceil(imageManifest.length / IMAGES_PER_PAGE)
 
 export default function Portfolio ({ landingImage = false }) {
   // Infinite scroll
   const observerTargetNode = useRef()
   const [page, setPage] = useState(0)
-  const nextPage = useCallback(() => setPage(prevPage => prevPage + 1), [])
+  const nextPage = useCallback(() => setPage(prevPage =>
+    // Only increment when we have more images to display
+    (prevPage + 1) < MAX_PAGES ? (prevPage + 1) : prevPage
+  ), [])
   useObserver(observerTargetNode, nextPage)
 
   // Modal
