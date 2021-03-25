@@ -1,10 +1,12 @@
 import { timeFormat } from 'd3-time-format'
+import { format } from 'd3-format'
 
 import Modal from '../Modal'
 
 import {
   ImageDetailModalContainer,
   Header,
+  PostInfo,
   Title,
   Hero,
   HeroCaption,
@@ -15,12 +17,14 @@ import {
   Footer,
   PostDate,
   NoteCount,
+  TagsTitle,
   Tag
 } from './styles'
 
 import { IMAGES_DIRECTORY } from '../../config'
 
-const formatTime = timestamp => timeFormat('%d %b %Y')(timestamp * 1000);
+const commas = format(',')
+const formatTime = timestamp => timeFormat('%B %Y')(timestamp * 1000);
 
 // Creates an object that is passed to `dangerouslySetInnerHTML`. There's no
 // user input involved here, so this is safe.
@@ -31,8 +35,12 @@ export default function ImageDetailModal ({ post, image, onClose }) {
     <Modal>
       <ImageDetailModalContainer>
         <Header>
-          <PostDate>{formatTime(post.timestamp)}</PostDate>
-          <NoteCount>❤︎ {post.note_count}</NoteCount>
+          <PostInfo>
+            <Title>Archives</Title>
+            <PostDate>{formatTime(post.timestamp)}</PostDate>
+            {post.note_count > 0 && <NoteCount>♥ {commas(post.note_count)}</NoteCount>}
+          </PostInfo>
+
           <div onClick={onClose}>close</div>
         </Header>
 
@@ -61,7 +69,7 @@ export default function ImageDetailModal ({ post, image, onClose }) {
         <Footer>
           {post.tags.length > 0 &&
             <>
-              <span>Tags</span>
+              <TagsTitle>Tags</TagsTitle>
               {post.tags.map(tag =>
                 <Tag key={tag}>{tag}</Tag>
               )}
