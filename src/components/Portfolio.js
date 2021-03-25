@@ -1,5 +1,5 @@
 // Simple test to add more points to an existing voronoi diagram
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 import { useObserver } from '../hooks/useObserver'
 
@@ -7,8 +7,9 @@ import ImageDetailModal from './ImageDetailModal'
 import Visualization from './Visualization'
 
 import imageManifest, { postsById } from '../util/loadManifest'
+import { setHash } from '../util/hash'
 
-export default function Portfolio () {
+export default function Portfolio ({ landingImage = false }) {
   // Infinite scroll
   const observerTargetNode = useRef()
   const [page, setPage] = useState(0)
@@ -16,10 +17,26 @@ export default function Portfolio () {
   useObserver(observerTargetNode, nextPage)
 
   // Modal
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(landingImage || false)
   // Memoize `openModal` to prevent unnecessary <Visualization> rerenders
-  const openModal = useCallback(portfolioItemIndex => setModal(imageManifest[portfolioItemIndex]), [])
-  const closeModal = () => setModal(false)
+  const openModal = useCallback(portfolioItemIndex => {
+    const image = imageManifest[portfolioItemIndex]
+    setModal(image)
+    setHash(image.fileId)
+  }, [])
+
+  const closeModal = () => {
+    setModal(false)
+    setHash()
+  }
+
+  useEffect(() => {
+    if (modal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+  }, [modal])
 
   return (
     <>
