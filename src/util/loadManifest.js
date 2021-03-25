@@ -3,6 +3,9 @@ import { shuffle } from './index'
 
 import manifest from '../manifest.json'
 
+  // We'll use this to skip everything before Dec 2011 (my really raw, old work)
+  const dateFloor = new Date(2011, 11, 1)
+
 // Use this to get width and height instead of loading images twice (once as an
 // HTMLImageElement via `new Image(...)` to get the dimensions, then again via
 // an SVG `<image href=...>`)
@@ -15,6 +18,10 @@ let fileCount = 0
 const imageManifest = []
 for (let post of manifest.posts) {
   if (!post.photos) continue;
+
+  // Skip super early work
+  const date = new Date(post.date)
+  if (date < dateFloor) continue;
 
   for (let i = 0; i < post.photos.length; i++) {
     const {
