@@ -9,21 +9,21 @@ const stripHash = hash => hash.startsWith('#') ? hash.slice(1) : hash;
 export function getLandingImage (hash = window.location.hash) {
   hash = stripHash(hash)
 
-  if (hash) {
-    const id = new URLSearchParams(hash).get('id')
+  if (!hash) return null;
 
-    if (id !== null) {
-      return imageManifest.find(image => image.fileId === +id)
-    }
-  }
-  return null
+  const id = new URLSearchParams(hash).get('id')
+
+  return id !== null
+    ? imageManifest.find(image => image.fileId === +id)
+    : null
 }
 
 // Set a new hash with the currently-selected image ID; for linking to an image
 export function setHash (id) {
+  let hash = ''
   if (typeof id === 'number') {
-    const hash = new URLSearchParams(stripHash(window.location.hash))
+    hash = new URLSearchParams(stripHash(window.location.hash))
     hash.set('id', id)
-    window.location.hash = hash.toString()
   }
+  window.location.hash = hash.toString()
 }
