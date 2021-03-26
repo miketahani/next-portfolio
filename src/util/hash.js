@@ -7,26 +7,23 @@ const stripHash = hash => hash.startsWith('#') ? hash.slice(1) : hash;
 // If there's a URL hash with a valid image ID on load, open the modal with that
 // image. This happens ONCE when the page loads for the first time.
 export function getLandingImage (hash = window.location.hash) {
-  let landingImage
-
   hash = stripHash(hash)
 
   if (hash) {
     const id = new URLSearchParams(hash).get('id')
 
     if (id !== null) {
-      landingImage = imageManifest.find(image => image.fileId === +id)
+      return imageManifest.find(image => image.fileId === +id)
     }
   }
-  return landingImage
+  return null
 }
 
 // Set a new hash with the currently-selected image ID; for linking to an image
 export function setHash (id) {
-  let hash = ''
   if (typeof id === 'number') {
-    hash = new URLSearchParams(stripHash(window.location.hash))
+    const hash = new URLSearchParams(stripHash(window.location.hash))
     hash.set('id', id)
+    window.location.hash = hash.toString()
   }
-  window.location.hash = hash.toString()
 }
