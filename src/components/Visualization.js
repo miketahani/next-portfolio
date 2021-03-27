@@ -6,16 +6,13 @@ import { line } from 'd3-shape'
 import CellImage from './CellImage'
 
 import { useDebouncedResize } from '../hooks/useDebouncedResize'
-import imageManifest from '../util/loadManifest'
 import { lerp } from '../util'
 
-
-const IMAGES_DIRECTORY = `${process.env.PUBLIC_URL}/datahacker-images`
-const IMAGES_PER_PAGE = 50
+import { IMAGES_DIRECTORY, IMAGES_PER_PAGE } from '../config'
 
 const path = line()
 
-export default function Visualization ({ page }) {
+export default function Visualization ({ page, imageManifest, onSelectImage }) {
   const [points, setPoints] = useState([])
 
   const [width, height] = useDebouncedResize(250)
@@ -36,7 +33,7 @@ export default function Visualization ({ page }) {
       }))
       setPoints(prevPoints => [...prevPoints, ...nextPoints])
     })()
-  }, [page])
+  }, [page, imageManifest])
 
   const voronoi = useMemo(() => {
     if (!points.length) return []
@@ -67,7 +64,7 @@ export default function Visualization ({ page }) {
       width="100vw"
       height={`${visPage * 100}vh`}
       viewBox={`0 0 ${width} ${visPage * height}`}
-      style={{paddingBottom: '100px'}}
+      style={{marginBottom: '100px'}}
     >
       <defs>
         {voronoi.map(cell =>
@@ -100,7 +97,8 @@ export default function Visualization ({ page }) {
             d={path(cell)}
             strokeWidth="2"
             stroke="#fff"
-            fill="none"
+            fillOpacity="0"
+            onClick={() => onSelectImage(points[cell.index].meta)}
             key={cell.index}
           />
         )}
