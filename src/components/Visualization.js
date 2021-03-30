@@ -129,6 +129,10 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
 
               return (
                 <g key={cell.index}>
+                  {/**
+                    * Use a foreignObject with an HTML trigger because
+                    * IntersectionObserver doesn't work work with SVG.
+                    */}
                   <foreignObject {...bbox} style={{pointerEvents: 'none'}}>
                     <div
                       className="trigger"
