@@ -22,18 +22,21 @@ export default function Portfolio ({ landingImage = false }) {
   ), [])
   useObserver(observerTargetNode, nextPage)
 
+  const [selectedCell, setSelectedCell] = useState()
+
   // Modal
   const [modal, setModal] = useState(landingImage || false)
   // Memoize `openModal` to prevent unnecessary <Visualization> rerenders
-  const openModal = useCallback(portfolioImage => {
+  const openModal = useCallback((portfolioImage, cellIndex) => {
     const image = imagesByFileId[portfolioImage.fileId]
-    setModal(image)
-    setHash(image.fileId)
+    // setModal(image)
+    setSelectedCell(cellIndex)
+    // setHash(image.fileId)
   }, [])
 
   const closeModal = () => {
-    setModal(false)
-    setHash()
+    // setModal(false)
+    // setHash()
   }
 
   // Prevent body from scrolling when modal is open
@@ -46,19 +49,20 @@ export default function Portfolio ({ landingImage = false }) {
       <Visualization
         page={page}
         imageManifest={imageManifest}
+        selectedImageIndex={selectedCell}
         onSelectImage={openModal}
       />
 
       <div id="ObserverTarget" ref={observerTargetNode} />
 
-      {!!modal &&
+      {/*!!modal &&
         <ImageDetailModal
           post={postsById[modal.postId]}
           image={modal}
           onSelectImage={openModal}
           onClose={closeModal}
         />
-      }
+      */}
     </>
   )
 }
