@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-import { debounce } from '../util'
+import useScrollPosition from '../hooks/useScrollPosition'
 
 const IDENTITY_FN = d => d;
 
@@ -9,12 +9,7 @@ export default function useViewportElementsTracker (selector, accessor = IDENTIT
   const observer = useRef()
 
   // Track scroll position because new nodes get added on scroll
-  const [scrollPosition, setScrollPosition] = useState(window.scrollY)
-  useEffect(() => {
-    const handleScroll = debounce(() => setScrollPosition(window.scrollY), 250)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const scrollPosition = useScrollPosition(250)
 
   const rootElementRef = useRef(null)
   /**
