@@ -14,6 +14,8 @@ import { lerp } from '../util'
 import { useDebouncedResize } from '../hooks/useDebouncedResize'
 import { IMAGES_PER_PAGE, IMAGES_DIRECTORY } from '../config'
 
+const DEBUG_MODE = false
+
 const path = line()
 
 const getCellIndex = ({ target }) => +target.dataset.cell;
@@ -59,11 +61,7 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
    */
   const visPage = polygons.length / IMAGES_PER_PAGE
 
-  // Naive
-  // const rootRef = useRef()
-  // const visibleCells = useElementsTracker(rootRef, '.trigger', getCellIndex)
-
-  // Galaxy brain
+  // Track elements in viewport (voronoi diagram cells) for modal animation layer
   const [rootRef, visibleCells] = useElementsTracker('.trigger', getCellIndex)
 
   return (
@@ -98,21 +96,9 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
       </g>
 
       {/* Debugging */}
-      {/*
-      <g className="DEBUG">
-        {points.map((point, i) =>
-          visibleCells.includes(i)
-            ? <circle
-                cx={point.x * width}
-                cy={point.y * height + point.page * height}
-                r={10}
-                fill="red"
-                key={i}
-              />
-            : null
-        )}
-      </g>
-      */}
+      {DEBUG_MODE &&
+        <DebugLayer points={points} visibleCells={visibleCells} width={width} height={height} />
+      }
 
       <g id="outlines">
         {/**
@@ -144,5 +130,26 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
         />
       }
     </svg>
+  )
+}
+
+function DebugLayer ({ points, visibleCells, width, height }) {
+  const visiblePoints = useMemo(
+    () => points.filter(point => visibleCells.includes(point)),
+    [points, visibleCells]
+  )
+
+  return (
+    <g className="DEBUG">
+      {visiblePoints.map((point, i) =>
+        <circle
+          cx={point.x * width}
+          cy={point.y * height + point.page * height}
+          r={10}
+          fill="red"
+          key={i}
+        />
+      )}
+    </g>
   )
 }
