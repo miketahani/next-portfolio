@@ -11,7 +11,7 @@ export default function walkCells (index, voronoi, activeCells, _layers = [], _d
  if (neighbors.length) _layers.push(neighbors)
 
  for (let neighbor of neighbors) {
-   walkCells(neighbor, _layers, _done)
+   walkCells(neighbor, voronoi, activeCells, _layers, _done)
  }
 
  return _layers
