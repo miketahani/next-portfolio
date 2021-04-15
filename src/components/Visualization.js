@@ -5,14 +5,13 @@ import { Delaunay } from 'd3-delaunay'
 import { line } from 'd3-shape'
 
 import CellImage from './CellImage'
-// import ModalAnimationLayer from './ModalAnimationLayer'
+import ModalAnimationLayer from './ModalAnimationLayer'
 
 // import useElementsTracker from '../hooks/useViewportElementsTrackerNaive'
 import useElementsTracker from '../hooks/useViewportElementsTracker'
 
-import { getBBox } from '../util'
+import { getBBox, lerp } from '../util'
 import { useDebouncedResize } from '../hooks/useDebouncedResize'
-import { lerp } from '../util'
 import { IMAGES_PER_PAGE, IMAGES_DIRECTORY } from '../config'
 
 
@@ -158,14 +157,14 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
         }
       </g>
 
-      {/*typeof selectedImageIndex === 'number' &&
+      {typeof selectedImageIndex === 'number' &&
         <ModalAnimationLayer
           polygons={polygons}
           voronoi={voronoi}
           visibleCells={visibleCells}
           selectedImageIndex={selectedImageIndex}
         />
-      */}
+      }
     </svg>
   )
 }
