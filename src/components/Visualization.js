@@ -7,7 +7,6 @@ import { line } from 'd3-shape'
 import Cell from './Cell'
 import ModalAnimationLayer from './ModalAnimationLayer'
 
-// import useElementsTracker from '../hooks/useViewportElementsTrackerNaive'
 import useElementsTracker from '../hooks/useViewportElementsTracker'
 
 import { lerp } from '../util'
