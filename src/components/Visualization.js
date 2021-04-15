@@ -4,16 +4,15 @@ import { Delaunay } from 'd3-delaunay'
 
 import { line } from 'd3-shape'
 
-import CellImage from './CellImage'
+import Cell from './Cell'
 import ModalAnimationLayer from './ModalAnimationLayer'
 
 // import useElementsTracker from '../hooks/useViewportElementsTrackerNaive'
 import useElementsTracker from '../hooks/useViewportElementsTracker'
 
-import { getBBox, lerp } from '../util'
+import { lerp } from '../util'
 import { useDebouncedResize } from '../hooks/useDebouncedResize'
 import { IMAGES_PER_PAGE, IMAGES_DIRECTORY } from '../config'
-
 
 const path = line()
 
@@ -67,8 +66,6 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
   // Galaxy brain
   const [rootRef, visibleCells] = useElementsTracker('.trigger', getCellIndex)
 
-  console.log('visibleCells', visibleCells)
-
   return (
     <svg
       width="100vw"
@@ -89,7 +86,7 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
 
       <g id="images">
         {points.map(({ meta, page: _page, filePath, x, y }, i) =>
-          <CellImage
+          <Cell.Thumbnail
             image={meta}
             localPath={filePath}
             polygon={polygons[i]}
@@ -101,6 +98,7 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
       </g>
 
       {/* Debugging */}
+      {/*
       <g className="DEBUG">
         {points.map((point, i) =>
           visibleCells.includes(i)
@@ -114,6 +112,7 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
             : null
         )}
       </g>
+      */}
 
       <g id="outlines">
         {/**
@@ -123,40 +122,19 @@ export default function Visualization ({ page, imageManifest, selectedImageIndex
          */}
         {polygons.length > 0 &&
           <g ref={rootRef}>
-            {polygons.map(cell => {
-              const bbox = getBBox(cell)
-
-              return (
-                <g key={cell.index}>
-                  {/**
-                    * Use a foreignObject with an HTML trigger because
-                    * IntersectionObserver doesn't work work with SVG.
-                    */}
-                  <foreignObject {...bbox} style={{pointerEvents: 'none'}}>
-                    <div
-                      className="trigger"
-                      data-cell={cell.index}
-                      style={{
-                        width: `${bbox.width}px`,
-                        height: `${bbox.height}px`
-                      }}
-                    />
-                  </foreignObject>
-
-                  <path
-                    d={path(cell)}
-                    strokeWidth="2"
-                    stroke="#fff"
-                    fillOpacity="0"
-                    onClick={() => console.log('click', cell.index) || onSelectImage(points[cell.index].meta, cell.index)}
-                  />
-                </g>
-              )
-            })}
+            {polygons.map(cell =>
+              <Cell.Interaction
+                cell={cell}
+                // FIXME Needlessly rerendering large subtree
+                onSelectCell={() => onSelectImage(points[cell.index].meta, cell.index)}
+                key={cell.index}
+              />
+            )}
           </g>
         }
       </g>
 
+      {/* Animation layer based on visualization layout */}
       {typeof selectedImageIndex === 'number' &&
         <ModalAnimationLayer
           polygons={polygons}
