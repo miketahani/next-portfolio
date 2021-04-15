@@ -29,16 +29,17 @@ export default function useResponsiveVoronoi (page, imageManifest) {
   }, [page, imageManifest])
 
   const voronoi = useMemo(() => {
-    if (!points.length) return []
+    if (!points.length) return null
 
     const delaunayPoints = points.map(({ page: _page, x, y }) => [
       x * width,
       y * height + _page * height
     ])
     const delaunay = Delaunay.from(delaunayPoints)
-    const polygons = delaunay.voronoi([0, 0, width, (page + 1) * height]).cellPolygons()
-    return [...polygons]
+    return delaunay.voronoi([0, 0, width, (page + 1) * height])
   }, [points, page, width, height])
+
+  const polygons = useMemo(() => voronoi ? [...voronoi.cellPolygons()] : [], [voronoi])
 
   /**
    * Need to create this intermediary value because `page` updates before
@@ -46,12 +47,13 @@ export default function useResponsiveVoronoi (page, imageManifest) {
    * height and viewBox will cause "stretching" in the diagram before the new
    * cells are added to the visualization.
    */
-  const visPage = voronoi.length / IMAGES_PER_PAGE
+  const visPage = polygons.length / IMAGES_PER_PAGE
 
   return {
     width,
     height,
     points,
+    polygons,
     voronoi,
     visPage
   }
