@@ -53,7 +53,11 @@ export default function Portfolio ({ landingImage = false }) {
         onSelectImage={openModal}
       />
 
-      <div id="ObserverTarget" ref={observerTargetNode} />
+      {(page + 1) < MAX_PAGES &&
+        <button id="ObserverTarget" ref={observerTargetNode} onClick={nextPage}>
+          Load more
+        </button>
+      }
 
       {/*!!modal &&
         <ImageDetailModal
